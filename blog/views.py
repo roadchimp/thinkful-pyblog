@@ -35,13 +35,29 @@ def posts(page=1, paginate_by=10):
         total_pages=total_pages
     )
   
+@app.route("/post/add", methods=["GET"])
+def add_post_get():
+    return render_template("add_post.html")
+  
+import mistune
+from flask import request, redirect, url_for
+
+@app.route("/post/add", methods=["POST"])
+def add_post_post():
+    post = Post(
+        title=request.form["title"],
+        content=mistune.markdown(request.form["content"]),
+    )
+    session.add(post)
+    session.commit()
+    return redirect(url_for("posts"))
+
 @app.route("/post/<int:id>", methods=["GET"])
 def view_post(id):
     posts = session.query(Post).get(id)
     return render_template("view_post.html",
          posts=posts        
     )
-
  
 @app.route("/post/<int:id>/edit", methods=["GET"])
 def edit_post_get(id):
@@ -57,20 +73,17 @@ def edit_post_post(id):
     posts.content = mistune.markdown(request.form["content"])
     session.commit()
     return redirect(url_for("posts"))
-  
-@app.route("/post/add", methods=["GET"])
-def add_post_get():
-    return render_template("add_post.html")
-  
-import mistune
-from flask import request, redirect, url_for
 
-@app.route("/post/add", methods=["POST"])
-def add_post_post():
-    post = Post(
-        title=request.form["title"],
-        content=mistune.markdown(request.form["content"]),
+@app.route("/post/<int:id>/delete")
+def delete_post_post(id):
+    posts = session.query(Post).get(id)
+    return render_template("delete_post.html",
+           posts=posts     
     )
-    session.add(post)
+  
+@app.route("/post/<int:id>/delete_confirm")
+def delete_post_confirm(id):
+    posts = session.query(Post).get(id)
+    session.delete(posts)
     session.commit()
     return redirect(url_for("posts"))
