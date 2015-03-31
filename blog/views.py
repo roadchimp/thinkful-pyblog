@@ -87,3 +87,7 @@ def delete_post_confirm(id):
     session.delete(posts)
     session.commit()
     return redirect(url_for("posts"))
+  
+@app.route("/login", methods=["GET"])
+def login_get():
+    return render_template("login.html")

@@ -1,8 +1,8 @@
 import datetime
 
 from sqlalchemy import Column, Integer, String, Text, DateTime
-
 from .database import Base, engine
+from flask.ext.login import UserMixin
 
 class Post(Base):
     __tablename__ = "posts"
@@ -13,3 +13,11 @@ class Post(Base):
     datetime = Column(DateTime, default=datetime.datetime.now)
 
 Base.metadata.create_all(engine)
+
+class User(Base, UserMixin):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(128))
+    email = Column(String(128), unique=True)
+    password = Column(String(128))
