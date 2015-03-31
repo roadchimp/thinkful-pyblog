@@ -6,6 +6,7 @@ from blog.models import Post
 from blog.database import session
 from werkzeug.security import generate_password_hash
 from blog.models import User
+from getpass import getpass
 
 manager = Manager(app)
 
@@ -26,7 +27,7 @@ def seed():
         session.add(post)
     session.commit()
 
-    from getpass import getpass
+    
 
 
 

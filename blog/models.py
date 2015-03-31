@@ -12,8 +12,6 @@ class Post(Base):
     content = Column(Text)
     datetime = Column(DateTime, default=datetime.datetime.now)
 
-Base.metadata.create_all(engine)
-
 class User(Base, UserMixin):
     __tablename__ = "users"
 
@@ -21,3 +19,5 @@ class User(Base, UserMixin):
     name = Column(String(128))
     email = Column(String(128), unique=True)
     password = Column(String(128))
+    
+Base.metadata.create_all(engine)
